@@ -1,0 +1,11 @@
+GUVI offers a variety of career-oriented courses for beginners and professionals.
+
+Python Programming: Learn programming logic, data types, loops, and build real projects.
+
+Data Science: Master data analysis, machine learning, and data visualization using Python.
+
+Full Stack Development: Learn front-end and back-end development with HTML, CSS, JavaScript, and React.
+
+AI & ML Course: Understand how Artificial Intelligence works, create machine learning models, and train neural networks.
+
+Cybersecurity: Learn how to secure systems, networks, and protect data from cyber threats.

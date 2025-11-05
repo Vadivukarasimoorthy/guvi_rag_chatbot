@@ -1,0 +1,7 @@
+Python is one of the most popular programming languages. GUVI offers hands-on Python projects for beginners to build strong practical skills.
+
+Artificial Intelligence is changing industries. Through GUVI’s AI courses, learners gain real-world problem-solving experience.
+
+Web Development is a highly in-demand skill. GUVI’s Full Stack program helps students master both front-end and back-end technologies.
+
+Data Science combines statistics, coding, and visualization. GUVI’s Data Science course guides learners from basics to advanced analytics.
