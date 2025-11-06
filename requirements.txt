@@ -3,8 +3,5 @@ faiss-cpu
 sentence-transformers
 numpy
 groq
-torch==2.2.0
-
-
-
-
+torch==2.1.0+cpu
+-f https://download.pytorch.org/whl/torch_stable.html
