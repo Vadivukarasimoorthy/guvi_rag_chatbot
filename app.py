@@ -7,8 +7,9 @@ from openai import OpenAI  # ✅ official new SDK
 # Configuration
 # -----------------------------
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # ✅ reads from Streamlit secrets
-
-model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+import torch
+model = SentenceTransformer('all-MiniLM-L6-v2')
+model = model.to(torch.device("cpu"))
 
 # Load FAISS index + text chunks
 index = faiss.read_index("data/faiss_index.bin")
