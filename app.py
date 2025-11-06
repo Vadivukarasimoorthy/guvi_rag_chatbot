@@ -1,12 +1,12 @@
 import streamlit as st
 from sentence_transformers import SentenceTransformer
-import faiss, numpy as np, openai, os
+import faiss, numpy as np, os
+from openai import OpenAI  # ✅ New client import
 
 # -----------------------------
 # Configuration
 # -----------------------------
-# Use environment variable for safety
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # ✅ Correct API setup
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
@@ -22,19 +22,19 @@ def retrieve_relevant_chunks(query, top_k=3):
     distances, indices = index.search(np.array(query_vector).astype('float32'), top_k)
     return [chunks[i] for i in indices[0]]
 
-# Generate answer via OpenAI
+# Generate answer via NEW OpenAI client
 def generate_answer(query):
     retrieved = retrieve_relevant_chunks(query)
     context = "\n".join(retrieved)
     prompt = f"Answer the user's question using the context below.\n\nContext:\n{context}\n\nQuestion: {query}\nAnswer:"
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(   # ✅ New syntax (not openai.ChatCompletion)
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=300,
         temperature=0.4,
     )
-    return response["choices"][0]["message"]["content"], retrieved
+    return response.choices[0].message.content, retrieved
 
 # -----------------------------
 # Streamlit UI
