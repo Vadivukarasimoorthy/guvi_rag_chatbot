@@ -1,16 +1,16 @@
 import streamlit as st
-import faiss, numpy as np, os
-from sentence_transformers_lite import SentenceTransformerLite as SentenceTransformer
-from openai import OpenAI
+from sentence_transformers import SentenceTransformer
+import faiss
+import numpy as np
+from transformers import pipeline
 
 # -----------------------------
-# Configuration
+# Local model setup (FREE)
 # -----------------------------
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # from Streamlit secrets
+model = SentenceTransformer('all-MiniLM-L6-v2')
+generator = pipeline("text2text-generation", model="google/flan-t5-base")
 
-model = SentenceTransformer("all-MiniLM-L6-v2")  # Lite model, no torch
-
-# Load FAISS index + text chunks
+# Load FAISS index and text chunks
 index = faiss.read_index("data/faiss_index.bin")
 with open("data/chunks_list.txt", "r", encoding="utf-8") as f:
     data = f.read().split("---")
@@ -22,27 +22,19 @@ def retrieve_relevant_chunks(query, top_k=3):
     distances, indices = index.search(np.array(query_vector).astype("float32"), top_k)
     return [chunks[i] for i in indices[0]]
 
-# Generate answer via OpenAI
+# Generate answer locally
 def generate_answer(query):
-    try:
-        retrieved = retrieve_relevant_chunks(query)
-        context = "\n".join(retrieved)
-        prompt = f"Answer using the GUVI context.\n\nContext:\n{context}\n\nQuestion: {query}\nAnswer:"
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=300,
-            temperature=0.4,
-        )
-        return response.choices[0].message.content, retrieved
-    except Exception as e:
-        return f"⚠️ API Error: {e}", []
+    retrieved = retrieve_relevant_chunks(query)
+    context = "\n".join(retrieved)
+    prompt = f"Use the following context to answer the question:\n\n{context}\n\nQuestion: {query}\nAnswer:"
+    result = generator(prompt, max_length=300)
+    return result[0]["generated_text"], retrieved
 
 # -----------------------------
 # Streamlit UI
 # -----------------------------
 st.set_page_config(page_title="GUVI Knowledge Chatbot", page_icon="🤖", layout="wide")
-st.title("🤖 GUVI Knowledge Chatbot – Lite Version")
+st.title("🤖 GUVI Knowledge Retrieval Chatbot")
 
 user_query = st.text_input("Ask anything about GUVI courses, certifications, or learning:")
 
@@ -51,6 +43,7 @@ if st.button("Get Answer") and user_query.strip():
         answer, refs = generate_answer(user_query)
     st.success("✅ Answer:")
     st.write(answer)
+
     with st.expander("📚 View Retrieved Context"):
         for r in refs:
             st.markdown(f"- {r}")
