@@ -3,6 +3,8 @@ faiss-cpu
 sentence-transformers
 numpy
 groq
+torch==2.2.0
+
 
 
 
