@@ -1,16 +1,14 @@
 import streamlit as st
 from sentence_transformers import SentenceTransformer
 import faiss, numpy as np, os
-from openai import OpenAI  # ✅ New client import
+from openai import OpenAI  # ✅ official new SDK
 
 # -----------------------------
 # Configuration
 # -----------------------------
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # ✅ Correct API setup
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # ✅ reads from Streamlit secrets
 
-import torch
-model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu' if not torch.cuda.is_available() else 'cuda')
-
+model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
 
 # Load FAISS index + text chunks
 index = faiss.read_index("data/faiss_index.bin")
@@ -24,7 +22,7 @@ def retrieve_relevant_chunks(query, top_k=3):
     distances, indices = index.search(np.array(query_vector).astype('float32'), top_k)
     return [chunks[i] for i in indices[0]]
 
-# Generate answer via NEW OpenAI client
+# Generate answer via OpenAI API
 def generate_answer(query):
     try:
         retrieved = retrieve_relevant_chunks(query)
@@ -41,7 +39,6 @@ def generate_answer(query):
 
     except Exception as e:
         return f"⚠️ API Error: {str(e)}", []
-
 
 # -----------------------------
 # Streamlit UI
