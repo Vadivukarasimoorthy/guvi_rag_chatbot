@@ -8,7 +8,8 @@ from openai import OpenAI  # ✅ New client import
 # -----------------------------
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # ✅ Correct API setup
 
-model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+import torch
+model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu' if not torch.cuda.is_available() else 'cuda')
 
 
 # Load FAISS index + text chunks
