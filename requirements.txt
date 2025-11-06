@@ -3,3 +3,5 @@ faiss-cpu
 sentence-transformers
 numpy
 openai
+torch==2.1.0+cpu
+-f https://download.pytorch.org/whl/torch_stable.html
