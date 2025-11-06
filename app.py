@@ -8,7 +8,8 @@ from openai import OpenAI  # ✅ New client import
 # -----------------------------
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # ✅ Correct API setup
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+
 
 # Load FAISS index + text chunks
 index = faiss.read_index("data/faiss_index.bin")
