@@ -25,17 +25,22 @@ def retrieve_relevant_chunks(query, top_k=3):
 
 # Generate answer via NEW OpenAI client
 def generate_answer(query):
-    retrieved = retrieve_relevant_chunks(query)
-    context = "\n".join(retrieved)
-    prompt = f"Answer the user's question using the context below.\n\nContext:\n{context}\n\nQuestion: {query}\nAnswer:"
+    try:
+        retrieved = retrieve_relevant_chunks(query)
+        context = "\n".join(retrieved)
+        prompt = f"Answer the user's question using the context below.\n\nContext:\n{context}\n\nQuestion: {query}\nAnswer:"
 
-    response = client.chat.completions.create(   # ✅ New syntax (not openai.ChatCompletion)
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=300,
-        temperature=0.4,
-    )
-    return response.choices[0].message.content, retrieved
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=300,
+            temperature=0.4,
+        )
+        return response.choices[0].message.content, retrieved
+
+    except Exception as e:
+        return f"⚠️ API Error: {str(e)}", []
+
 
 # -----------------------------
 # Streamlit UI
