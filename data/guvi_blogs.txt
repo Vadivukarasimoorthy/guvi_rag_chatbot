@@ -5,3 +5,5 @@ Artificial Intelligence is changing industries. Through GUVI’s AI courses, lea
 Web Development is a highly in-demand skill. GUVI’s Full Stack program helps students master both front-end and back-end technologies.
 
 Data Science combines statistics, coding, and visualization. GUVI’s Data Science course guides learners from basics to advanced analytics.
+
+Zen Class is GUVI's flagship career program that provides placement training, mentorship, and guaranteed job opportunities for learners after completing the course.

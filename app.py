@@ -31,10 +31,17 @@ def retrieve_chunks(query, top_k=3):
 
 def generate_answer(query):
     retrieved = retrieve_chunks(query)
-    context = "\n".join(retrieved)
-    prompt = f"Use the context below to answer:\n\n{context}\n\nQuestion: {query}\nAnswer:"
-    output = generator(prompt, max_length=256)
-    return output[0]['generated_text'], retrieved
+
+    context = retrieved[0]  # Most relevant chunk
+
+    if "A:" in context:
+        answer = context.split("A:")[1].strip()
+    else:
+        answer = context
+
+    return answer, retrieved
+
+
 
 # -----------------------------
 # Streamlit UI

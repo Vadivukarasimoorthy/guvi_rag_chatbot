@@ -9,3 +9,5 @@ Full Stack Development: Learn front-end and back-end development with HTML, CSS,
 AI & ML Course: Understand how Artificial Intelligence works, create machine learning models, and train neural networks.
 
 Cybersecurity: Learn how to secure systems, networks, and protect data from cyber threats.
+
+Zen Class is GUVI's flagship career program that provides placement training, mentorship, and guaranteed job opportunities for learners after completing the course.

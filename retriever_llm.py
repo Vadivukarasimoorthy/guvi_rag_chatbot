@@ -17,10 +17,23 @@ chunks = [c.strip() for c in data if c.strip()]
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 def retrieve_relevant_chunks(query, top_k=3):
-    """Retrieve the most similar chunks for a query"""
     query_vector = model.encode([query])
-    distances, indices = index.search(np.array(query_vector).astype('float32'), top_k)
-    results = [chunks[i] for i in indices[0]]
+
+    distances, indices = index.search(
+        np.array(query_vector).astype('float32'),
+        top_k
+    )
+
+    print("\nQuery:", query)
+    print("\nRetrieved Chunks:")
+
+    results = []
+
+    for idx in indices[0]:
+        print(chunks[idx])
+        print("-" * 50)
+        results.append(chunks[idx])
+
     return results
 
 def generate_answer(query):
@@ -39,7 +52,7 @@ def generate_answer(query):
     return response["choices"][0]["message"]["content"]
 
 # Example Test
-if __name__ == "__main__":
+if _name_ == "_main_":
     user_q = input("Ask a question: ")
     ans = generate_answer(user_q)
     print("\n💬 Chatbot Answer:\n", ans)
